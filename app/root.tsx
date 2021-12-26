@@ -38,6 +38,7 @@ export default function App() {
 
         <ScrollRestoration />
         <Scripts />
+
         {process.env.NODE_ENV === "development" && <LiveReload />}
 
       </body>
@@ -59,6 +60,7 @@ function Layout({ children, current_page }: { children: JSX.Element, current_pag
           current_page={current_page}
         />
 
+        // TODO: Logout if logged in ?
         <NavIcon
           icon={<FaUser />}
           tooltip="Account"

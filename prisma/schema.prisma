@@ -13,7 +13,7 @@ datasource db {
 // User
 
 model User {
-  id            String @id @default(cuid())
+  id            String @id @unique @default(cuid())
   username      String
   avatar        String
   discriminator String
@@ -26,16 +26,16 @@ model User {
   createdAt DateTime @default(now())
 
   messages Message[]
-  servers  Server[]  @relation(references: [id])
+  servers  Server[]
 
-  profile Profile?
+  profile   Profile?
 
   ServerMember ServerMember[]
 }
 
 model Profile {
 
-  id String @id @default(cuid())
+  id String @id @unique @default(cuid())
 
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique
@@ -68,8 +68,8 @@ model Attachment {
   message   Message @relation(fields: [messageId], references: [id])
   messageId String
 
-  url String
-
+  url       String
+  channelId String
 }
 
 // Server
@@ -83,11 +83,12 @@ model Server {
 
   createdAt DateTime @default(now())
 
-  users User[] @relation(references: [id])
-
+  // Fuck this line
+  users   User[]
   channel Channel[]
   members ServerMember[]
   roles   Role[]
+
 }
 
 model Role {
@@ -112,8 +113,7 @@ model Channel {
 
   createdAt DateTime @default(now())
 
-  messages Message[] @relation
-
+  messages Message[]
 }
 
 model ServerMember {
@@ -131,4 +131,4 @@ model ServerMember {
 
   nickname String
   roles    Role[] @relation
-} 
+}

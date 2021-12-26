@@ -48,10 +48,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
 
-    console.log('a');
-    
     const data = await request.formData();
-
 
     // Register
     if (data.has('username')) {
@@ -115,7 +112,7 @@ export default function Index(): JSX.Element {
 
     return (
 
-        <Form>
+        <Form method="post">
 
             <h1 className="text-3xl text-teal-400 font-bold">
                 {isRegistering ? 'Register' : 'Login'}
@@ -154,7 +151,7 @@ export default function Index(): JSX.Element {
                 <input type="password" name="password" required />
             </label>
 
-            <button>
+            <button type="submit">
                 {isRegistering ? 'Register' : 'Login'}
             </button>
 

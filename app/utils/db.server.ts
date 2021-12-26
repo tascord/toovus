@@ -103,34 +103,13 @@ export function register_account(username: string, email: string, password: stri
                 email: email,
                 password: hashed,
                 avatar: 'default',
-                discriminator: discriminator
-            }
-        });
-
-        // Create profile
-        let profile = await db.profile.create({
-            data: {
-                user: {
-                    connect: {
-                        id: user.id
-                    }
-                }
-            }
-        });
-
-        user = await db.user.update({
-            where: {
-                id: user.id
-            },
-
-            data: {
+                discriminator: discriminator,
                 profile: {
-                    connect: {
-                        id: profile.id
+                    create: {
                     }
                 }
             }
-        })
+        });
 
         resolve(new User(user));
 

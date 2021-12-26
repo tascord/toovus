@@ -4,6 +4,7 @@ import Signer from "../signer.server";
 import UserFlags, { UserFlag } from "./UserFlags";
 
 type JsonUser = {
+    id: string;
     flag: number;
     email: string;
     password: string;
@@ -61,10 +62,11 @@ export class User {
 
         return new Promise((resolve, reject) => {
 
-            if (!Signer.verify(token)) return reject("Invalid authorization");
-
+            if (!Signer.verify(token)) return reject("Invalid token signature");
             const data = Signer.decode(token);
-            if (!data || !data.payload.id) return reject("Invalid authorization");
+
+            if (!data || !data.payload || !data.payload.id)
+                return reject("Invalid token structure");
 
             User.from_id(data.payload.id)
                 .then(resolve)
@@ -83,7 +85,7 @@ export class User {
             }).then(async user => {
 
                 if (!user) return reject("No user exists with that email");
-                if(user.password !== hash(password)) return reject("Invalid password");
+                if (user.password !== hash(password)) return reject("Invalid password");
 
                 resolve(new User(user));
 
@@ -115,6 +117,7 @@ export class User {
     private to_JSON(): JsonUser {
 
         return {
+            id: this.id,
             flag: this.flag.flag,
             email: this._email,
             password: this._password,
